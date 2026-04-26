@@ -1,0 +1,9 @@
+gradio==4.44.1
+pandas
+chromadb
+langchain
+langchain-google-genai
+langchain-chroma
+deep-translator
+python-dotenv
+/
