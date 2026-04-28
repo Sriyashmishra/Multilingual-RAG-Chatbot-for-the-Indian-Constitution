@@ -111,7 +111,7 @@ def initialize_app():
     else:
         df = None
 
-    embedding_model = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    embedding_model = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     vectorstore = Chroma(
         persist_directory=CHROMA_DB_DIR,
         embedding_function=embedding_model,
