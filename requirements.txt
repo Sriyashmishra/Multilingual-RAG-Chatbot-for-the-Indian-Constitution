@@ -2,6 +2,8 @@ gradio
 pandas
 chromadb
 langchain
+langchain-core
+langchain-community
 langchain-google-genai
 langchain-chroma
 deep-translator
