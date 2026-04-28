@@ -1,3 +1,20 @@
+import sys
+from pathlib import Path
+
+# Compatibility fix for Python versions older than 3.10.
+# Some Google client libraries expect importlib.metadata.packages_distributions to exist.
+try:
+    import importlib.metadata as importlib_metadata
+except ImportError:
+    import importlib_metadata as importlib_metadata
+
+if not hasattr(importlib_metadata, "packages_distributions"):
+    try:
+        import importlib_metadata as backport
+        importlib_metadata.packages_distributions = backport.packages_distributions
+    except ImportError:
+        pass
+
 import os
 import time
 import re
@@ -18,7 +35,10 @@ from langchain.docstore.document import Document
 # ==========================================
 # CONFIGURATION
 # ==========================================
-load_dotenv() 
+dotenv_path = Path(__file__).resolve().parent / ".env"
+print(f"Loading .env from {dotenv_path}")
+load_dotenv(dotenv_path=dotenv_path)
+print(f"GOOGLE_API_KEY loaded: {'yes' if os.getenv('GOOGLE_API_KEY') else 'no'}")
 
 INPUT_CSV = "Constitution Of India.csv"
 PROCESSED_CSV = "multilingual_constitution.csv"
@@ -91,7 +111,7 @@ def initialize_app():
     else:
         df = None
 
-    embedding_model = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+    embedding_model = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     vectorstore = Chroma(
         persist_directory=CHROMA_DB_DIR,
         embedding_function=embedding_model,
@@ -173,4 +193,8 @@ with gr.Blocks(title="Constitution AI", theme=custom_theme, css=custom_css) as d
         )
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", 7860)),
+        share=False,
+    )
