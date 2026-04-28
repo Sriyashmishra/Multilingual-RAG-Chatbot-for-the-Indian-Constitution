@@ -1,4 +1,4 @@
-gradio==4.44.1
+gradio
 pandas
 chromadb
 langchain
@@ -6,4 +6,3 @@ langchain-google-genai
 langchain-chroma
 deep-translator
 python-dotenv
-importlib-metadata; python_version < "3.10"
